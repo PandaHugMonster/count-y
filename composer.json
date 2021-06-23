@@ -1,0 +1,21 @@
+{
+  "name": "spaf/count-y",
+  "description": "Simple web-site visits counter lib",
+  "minimum-stability": "stable",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "Ivan Ponomarev",
+      "email": "pi@spaf.dev"
+    }
+  ],
+  "type": "library",
+  "require": {
+    "php": ">=7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "spaf\\county\\": "county/"
+    }
+  }
+}
