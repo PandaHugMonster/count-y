@@ -7,12 +7,10 @@ Simple PHP Counter
 
  1. Go to the folder of the project (git/code repo) `/home/user/my-code`
  2. Run commands in terminal in your code folder:
-    **important**: Code bellow, will remove content of "composer.json", so if you are not sure that you want to lose it - back it up.
+
 
 ```shell
-    echo "{}" > composer.json;
-    composer config repo.pp1 path /home/ivan/development/count-y;
-    composer require spaf/count-y=dev-master;
+    composer require spaf/count-y;
 ```
 
 ## Basic usage (file-based)
@@ -47,5 +45,4 @@ echo "Test: ".$c->get_count();
 
 
 That's it.
-
-The code is unfinished. So do not expect fully proper operation
+The lib right now supports really minimal functionality.
