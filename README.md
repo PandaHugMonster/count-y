@@ -25,7 +25,7 @@ use spaf\county\storage\StorageFile;
 $c = new Counter(new StorageFile());
 //  In case if the StorageFile is not specified, the value will be stored in memory (StorageMemory class). So it will exist
 //  until end of the runtime/execution.
-$c = new Counter();
+//$c = new Counter();
 
 //  If you need events, first delegate/closure is an event function, the second - event condition. The first will work,
 //  only if the second will return TRUE, or if condition delegate/closure is not specified.

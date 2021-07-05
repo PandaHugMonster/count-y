@@ -1,6 +1,6 @@
 {
   "name": "spaf/count-y",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Simple web-site visits counter lib",
   "minimum-stability": "stable",
   "license": "GPL-3.0-or-later",
