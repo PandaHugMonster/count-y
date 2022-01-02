@@ -1,6 +1,5 @@
 {
   "name": "spaf/count-y",
-  "version": "1.0.2",
   "description": "Simple web-site visits counter lib",
   "minimum-stability": "stable",
   "license": "GPL-3.0-or-later",
@@ -12,11 +11,12 @@
   ],
   "type": "library",
   "require": {
-    "php": ">=8.0"
+    "php": ">=8.0",
+    "spaf/simputils": "~0.2.4 || ~1"
   },
   "autoload": {
     "psr-4": {
-      "spaf\\county\\": "county/"
+      "spaf\\county\\": "src/"
     }
   }
 }

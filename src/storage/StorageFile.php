@@ -5,7 +5,9 @@ namespace spaf\county\storage;
 
 
 use spaf\county\base\BaseStorage;
+use spaf\simputils\attributes\Property;
 
+// FIX  Implement normal simputils file content usage
 class StorageFile extends BaseStorage {
 
 //	TODO    Implement optional locking mechanism
@@ -74,14 +76,14 @@ class StorageFile extends BaseStorage {
 	 *
 	 * @return bool
 	 */
-	protected function store_value(int $value): bool {
+	protected function storeValue(int $value): bool {
 		return $this->set_data_to_file($value);
 	}
 
 	/**
 	 * @return int
 	 */
-	public function get_value(): int {
+	#[Property('value')] public function getValue(): int {
 		$data = $this->get_named_data();
 		if (empty($data['counter']))
 			return 0;

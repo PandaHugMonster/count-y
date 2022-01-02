@@ -1,12 +1,20 @@
 <?php
 
-
 namespace spaf\county\base;
 
 
-use spaf\county\storage\StorageMemory;
+use Closure;
+use spaf\simputils\attributes\Property;
+use spaf\simputils\generic\SimpleObject;
 
-abstract class BaseCounter {
+/**
+ * Class BaseCounter
+ *
+ * @property-read int $count
+ *
+ * @package spaf\county\base
+ */
+abstract class BaseCounter extends SimpleObject {
 
 //	TODO    Implement historical values (hour, day, week, month, year)
 
@@ -21,9 +29,7 @@ abstract class BaseCounter {
 		if (empty($storage))
 			$storage = new StorageMemory();
 		$this->storage = $storage;
-		$this->storage->_set_checker(function ($value) {
-			$this->check_value($value);
-		});
+		$this->storage->checker = Closure::fromCallable([$this, 'checkValue']);
 	}
 
 //	protected function record_history($value, $name) {
@@ -33,20 +39,21 @@ abstract class BaseCounter {
 //
 //	}
 
+	#[Property('count')]
+	protected function getCount(): int {
+		return $this->storage->value;
+	}
+
 	public function visit(): int {
-		return $this->storage->increment_value();
+		return $this->storage->incrementValue();
 	}
 
-	public function get_count(): int {
-		return $this->storage->get_value();
+	public function resetCount(): int {
+		$this->storage->resetValue();
+		return $this->storage->value;
 	}
 
-	public function reset_count(): int {
-		$this->storage->reset_value();
-		return $this->storage->get_value();
-	}
-
-	protected function check_value(int $value): void {
+	protected function checkValue(int $value): void {
 		if ($this->_event_list) {
 			foreach ($this->_event_list as $name => $ar) {
 				$condition = $ar[self::EVENT_ARRAY_INDEX_CONDITION];
@@ -67,7 +74,7 @@ abstract class BaseCounter {
 
 	}
 
-	public function add_event(string $name, callable $on_event, callable|int $condition = null, bool $is_replace = false): bool {
+	public function addEvent(string $name, callable $on_event, callable|int $condition = null, bool $is_replace = false): bool {
 		if (!isset($this->_event_list[$name]) || $is_replace) {
 			$this->_event_list[$name] = [
 				self::EVENT_ARRAY_INDEX_CONDITION => $condition,
@@ -79,14 +86,13 @@ abstract class BaseCounter {
 		return false;
 	}
 
-	#[ArrayShape([ 'if' => 'callable', 'on' => 'callable' ])]
-	public function get_event(string $name): ?array {
+	public function getEvent(string $name): ?array {
 		if (isset($this->_event_list[$name]))
 			return $this->_event_list[$name];
 		return null;
 	}
 
-	public function remove_event(string $name): bool {
+	public function removeEvent(string $name): bool {
 		if (isset($this->_event_list[$name])) {
 			unset($this->_event_list[$name]);
 			return true;

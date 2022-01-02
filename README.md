@@ -40,7 +40,7 @@ for ($i = 0; $i <= 105; $i++) {
 	$c->visit();
 }
 
-echo "Test: ".$c->get_count();
+echo "Test: {$c->count}";
 ```
 
 
