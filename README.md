@@ -2,6 +2,8 @@
 
 Simple PHP Counter
 
+Version: **2.0.0**
+
 ## To install
 
 
@@ -21,10 +23,13 @@ require __DIR__.'/vendor/autoload.php';
 
 use spaf\county\Counter;
 use spaf\county\storage\StorageFile;
+use spaf\simputils\PHP;
+
+PHP::init();
 
 $c = new Counter(new StorageFile());
-//  In case if the StorageFile is not specified, the value will be stored in memory (StorageMemory class). So it will exist
-//  until end of the runtime/execution.
+//  In case if the StorageFile is not specified, the value will be stored in memory (StorageMemory
+//  class). So it will exist until end of the runtime/execution.
 //$c = new Counter();
 
 //  If you need events, first delegate/closure is an event function, the second - event condition. The first will work,
@@ -40,7 +45,8 @@ for ($i = 0; $i <= 105; $i++) {
 	$c->visit();
 }
 
-echo "Test: ".$c->get_count();
+echo "Test: {$c}";
+
 ```
 
 

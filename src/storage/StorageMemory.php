@@ -6,6 +6,7 @@ namespace spaf\county\storage;
 
 use Exception;
 use spaf\county\base\BaseStorage;
+use spaf\simputils\attributes\Property;
 
 class StorageMemory extends BaseStorage {
 
@@ -16,7 +17,7 @@ class StorageMemory extends BaseStorage {
 	 *
 	 * @return bool
 	 */
-	protected function store_value(int $value): bool {
+	protected function storeValue(int $value): bool {
 		try {
 			$this->_storage = $value;
 		} catch (Exception) {
@@ -28,7 +29,8 @@ class StorageMemory extends BaseStorage {
 	/**
 	 * @return int
 	 */
-	public function get_value(): int {
+	#[Property('value')]
+	public function getValue(): int {
 		return $this->_storage;
 	}
 }
