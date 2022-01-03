@@ -12,12 +12,12 @@ use spaf\simputils\generic\SimpleObject;
  * Class BaseStorage
  *
  * @property int $value
- * @property Closure|array|null $checker
+ * @property Closure|Box|array|null $checker
  * @package spaf\county\base
  */
 abstract class BaseStorage extends SimpleObject {
 
-	private array|Closure|null $_checker_callback_array = null;
+	private array|Box|Closure|null $_checker_callback_array = null;
 
 	abstract protected function storeValue(int $value);
 
@@ -32,12 +32,12 @@ abstract class BaseStorage extends SimpleObject {
 	}
 
 	#[Property('checker')]
-	protected function setChecker(Closure|array|null $callback) {
+	protected function setChecker(Closure|Box|array|null $callback) {
 		$this->_checker_callback_array = $callback;
 	}
 
 	#[Property('checker')]
-	protected function getChecker(): Closure|array|null {
+	protected function getChecker(): Closure|Box|array|null {
 		return $this->_checker_callback_array;
 	}
 
@@ -63,5 +63,4 @@ abstract class BaseStorage extends SimpleObject {
 			?$current_value
 			:$this->value;
 	}
-
 }

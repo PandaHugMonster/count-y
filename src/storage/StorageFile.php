@@ -6,87 +6,74 @@ namespace spaf\county\storage;
 
 use spaf\county\base\BaseStorage;
 use spaf\simputils\attributes\Property;
+use spaf\simputils\models\Box;
+use spaf\simputils\models\File;
+use function spaf\simputils\basic\box;
+use function spaf\simputils\basic\fl;
+use function spaf\simputils\basic\now;
 
-// FIX  Implement normal simputils file content usage
+/**
+ * TODO Implement optional locking mechanism
+ *
+ * @property-read File $file Storage file instance
+ */
 class StorageFile extends BaseStorage {
 
-//	TODO    Implement optional locking mechanism
+	const DEFAULT_FILE = 'count-y.json';
+
+	protected null|File|string $_file = null;
 
 	private ?string $_file_path = null;
-	protected ?array $last_state = null;
+	protected ?Box $last_state = null;
 	public string $data_set_name = 'default';
 
-	public function __construct(?string $file_path = null) {
-		$this->_file_path = $file_path ?? 'count-y.json';
+	public function __construct(null|File|string $file = null) {
+		$this->_file = fl($file ?? static::DEFAULT_FILE);
 	}
 
-	public function read_from_file(): ?string {
-		if (!file_exists($this->_file_path))
-			return null;
-
-//		$fd = fopen($this->_file_path, 'r');
-//		$content = fread($fd, filesize($this->_file_path) + 1);
-//		fclose($fd);
-		$content = file_get_contents($this->_file_path);
-
-		return $content;
+	#[Property('file')]
+	public function getFile(): File {
+		// TODO When "read only object-wrapper" will be implemented in SimpUtils
+		//      implement here through that wrapper
+		return $this->_file;
 	}
 
-	public function write_to_file(string $data_string): bool {
-//		$fd = fopen($this->_file_path, 'w+');
-//		$res = fwrite($fd, $data_string);
-//		fclose($fd);
-		$res = file_put_contents($this->_file_path, $data_string);
-		return boolval($res);
+	/**
+	 * @return int
+	 */
+	#[Property('value')]
+	public function getValue(): int {
+		$data = $this->getNamedData();
+		if (empty($data['counter'])) {
+			return 0;
+		}
+		return (int) $data['counter'];
 	}
 
-	protected function set_data_to_file(int $value): bool {
-//		print_r('TEST: '.$value);
-		$data = $this->get_data_from_file();
-		$data[$this->data_set_name] = [
-			'counter' => $value,
-			'last_update_at' => date('Y-m-d H:i:s'),
-		];
-		$data_string = json_encode($data);
-		return $this->write_to_file($data_string);
-	}
-
-	protected function get_data_from_file(): ?array {
-		$this->last_state = null;
-		$content = $this->read_from_file();
-
-		if (empty($content))
-			return null;
-
-		// Currently only json format is supported
-		$this->last_state = json_decode($content, true);
-		return $this->last_state;
-	}
-
-	protected function get_named_data(): ?array {
-		$data = $this->get_data_from_file();
-		if (!empty($data[$this->data_set_name]))
-			return $data[$this->data_set_name];
-
-		return null;
+	protected function getNamedData(): ?Box {
+		$this->last_state = box([]);
+		if (!empty($content = $this->_file->content)) {
+			$this->last_state = box($content);
+		}
+		return box($this->last_state[$this->data_set_name]) ?? null;
 	}
 
 	/**
 	 * @param int $value
 	 *
 	 * @return bool
+	 * @throws \Exception
 	 */
 	protected function storeValue(int $value): bool {
-		return $this->set_data_to_file($value);
-	}
+		$data = $this->_file->content;
 
-	/**
-	 * @return int
-	 */
-	#[Property('value')] public function getValue(): int {
-		$data = $this->get_named_data();
-		if (empty($data['counter']))
-			return 0;
-		return (int) $data['counter'];
+		$data[$this->data_set_name] = [
+			'counter' => $value,
+			'last_update_at' => now(),
+		];
+
+		// TODO Implement try-catch here with returning false
+		$this->_file->content = $data;
+		return true;
 	}
 }

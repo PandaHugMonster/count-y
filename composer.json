@@ -1,6 +1,9 @@
 {
   "name": "spaf/count-y",
   "description": "Simple web-site visits counter lib",
+  "keywords": [
+    "visits count", "simple counter", "counter", "visits", "library"
+  ],
   "minimum-stability": "stable",
   "license": "GPL-3.0-or-later",
   "authors": [
@@ -13,6 +16,9 @@
   "require": {
     "php": ">=8.0",
     "spaf/simputils": "~0.2.4 || ~1"
+  },
+  "replace": {
+    "spaf/count-y": "*"
   },
   "autoload": {
     "psr-4": {

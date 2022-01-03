@@ -6,6 +6,8 @@ namespace spaf\county\base;
 use Closure;
 use spaf\simputils\attributes\Property;
 use spaf\simputils\generic\SimpleObject;
+use spaf\simputils\models\Box;
+use function spaf\simputils\basic\box;
 
 /**
  * Class BaseCounter
@@ -21,23 +23,18 @@ abstract class BaseCounter extends SimpleObject {
 	const EVENT_ARRAY_INDEX_CONDITION = 'if';
 	const EVENT_ARRAY_INDEX_DELEGATE = 'on';
 
-	private array $_event_list = [];
+	private Box|array $_event_list;
 
 	protected ?BaseStorage $storage = null;
 
 	public function __construct(?BaseStorage $storage = null) {
+		$this->_event_list = box([]);
+
 		if (empty($storage))
 			$storage = new StorageMemory();
 		$this->storage = $storage;
 		$this->storage->checker = Closure::fromCallable([$this, 'checkValue']);
 	}
-
-//	protected function record_history($value, $name) {
-//		if (empty($this->storage) || !method_exists($this->storage, 'save_history'))
-//			return ;
-//
-//
-//	}
 
 	#[Property('count')]
 	protected function getCount(): int {
@@ -86,9 +83,9 @@ abstract class BaseCounter extends SimpleObject {
 		return false;
 	}
 
-	public function getEvent(string $name): ?array {
+	public function getEvent(string $name): ?Box {
 		if (isset($this->_event_list[$name]))
-			return $this->_event_list[$name];
+			return box($this->_event_list[$name]);
 		return null;
 	}
 
