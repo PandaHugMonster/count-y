@@ -28,7 +28,7 @@ abstract class BaseCounter extends SimpleObject {
 	protected ?BaseStorage $storage = null;
 
 	public function __construct(?BaseStorage $storage = null) {
-		$this->_event_list = box([]);
+		$this->_event_list = box();
 
 		if (empty($storage))
 			$storage = new StorageMemory();
