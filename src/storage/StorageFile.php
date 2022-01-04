@@ -14,6 +14,8 @@ use function spaf\simputils\basic\now;
 
 /**
  * TODO Implement optional locking mechanism
+ * TODO Currently only json file format is supported
+ *
  *
  * @property-read File $file Storage file instance
  */
@@ -51,11 +53,11 @@ class StorageFile extends BaseStorage {
 	}
 
 	protected function getNamedData(): ?Box {
-		$this->last_state = box([]);
+		$this->last_state = box();
 		if (!empty($content = $this->_file->content)) {
 			$this->last_state = box($content);
 		}
-		return box($this->last_state[$this->data_set_name]) ?? null;
+		return box($this->last_state[$this->data_set_name] ?? null) ?? null;
 	}
 
 	/**

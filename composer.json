@@ -15,7 +15,7 @@
   "type": "library",
   "require": {
     "php": ">=8.0",
-    "spaf/simputils": "~0.2.4 || ~1"
+    "spaf/simputils": "~0.3 || ~1"
   },
   "replace": {
     "spaf/count-y": "*"
