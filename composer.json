@@ -15,10 +15,7 @@
   "type": "library",
   "require": {
     "php": ">=8.0",
-    "spaf/simputils": "~0.3 || ~1"
-  },
-  "replace": {
-    "spaf/count-y": "*"
+    "spaf/simputils": "^1"
   },
   "autoload": {
     "psr-4": {
